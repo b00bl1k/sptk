@@ -1,8 +1,8 @@
 #!/usr/bin/env python3 -m sptk
 [Desktop Entry]
 Type=Application
-Icon=
-Exec=sptk
+Icon=ru.b00bl1k.sptk
+Exec=sptk %U
 Name=Serial Port Toolkit
 GenericName=Serial Terminal
 Comment=Two panel serial port toolkit
