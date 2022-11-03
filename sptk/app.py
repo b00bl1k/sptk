@@ -30,7 +30,10 @@ class WxListSerialLog(port.SerialLogView):
 
 
 class SerialPortDialog(ui.SerialPortDialog):
-    BAUDRATES = ["300", "600", "1200", "2400", "9600", "115200"]
+    BAUDRATES = [
+        "300", "600", "1200", "2400", "4800", "9600",
+        "19200", "38400", "57600", "115200",
+    ]
     DATABITS = {
         "5": serial.FIVEBITS,
         "6": serial.SIXBITS,
