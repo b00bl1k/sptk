@@ -15,6 +15,7 @@ setup(
         "pyserial>=3.5",
     ],
     data_files=[
+        ("share/locale/ru/LC_MESSAGES", ["locales/ru/LC_MESSAGES/sptk.mo"]),
         ("share/applications", ["data/ru.b00bl1k.sptk.desktop"]),
     ],
     include_package_data=True,

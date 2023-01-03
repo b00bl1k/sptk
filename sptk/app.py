@@ -107,7 +107,7 @@ class SendDialog(ui.SendDialog):
             try:
                 data_bytes = bytes.fromhex(data.replace(" ", ""))
             except ValueError as e:
-                wx.MessageBox(str(e), "Error", wx.OK | wx.ICON_ERROR)
+                wx.MessageBox(str(e), _("Error"), wx.OK | wx.ICON_ERROR)
                 return
         else:
             data_bytes = data.encode("utf-8")
@@ -122,8 +122,8 @@ class SendDialog(ui.SendDialog):
 
 class MainWindow(ui.MainWindow):
 
-    TX_COLUMNS = ["#", "Time", "Transmitted"]
-    RX_COLUMNS = ["#", "Time", "Received"]
+    TX_COLUMNS = ["#", _("Time"), _("Transmitted")]
+    RX_COLUMNS = ["#", _("Time"), _("Received")]
 
     def __init__(self, parent):
         super().__init__(parent)
@@ -237,7 +237,7 @@ class MainWindow(ui.MainWindow):
         self.update_status_bar()
 
     def mnu_about_click(self, event):
-        wx.MessageBox(f"Serial Port Toolkit v{version.__version__}", "About...",
+        wx.MessageBox(f"Serial Port Toolkit v{version.__version__}", _("About"),
                       wx.OK | wx.CENTRE | wx.ICON_INFORMATION)
 
     def btn_tx_clear_click(self, event):
@@ -259,7 +259,7 @@ class MainWindow(ui.MainWindow):
                 self.ser_worker = port.ReaderThread(self.ser, self.ser_receiver)
                 self.ser_worker.start()
         except serial.SerialException as e:
-            wx.MessageBox(str(e), "Error", wx.OK | wx.ICON_ERROR)
+            wx.MessageBox(str(e), _("Error"), wx.OK | wx.ICON_ERROR)
 
     def serial_close(self):
         if self.ser_worker:
