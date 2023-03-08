@@ -143,6 +143,7 @@ class MainWindow(ui.MainWindow):
         self.tx_log = port.SerialLog(self.tx_log_view, 16)
 
         self.load_settings()
+        self.splitter.SetSashGravity(0.5)
 
         self.send_dialog = SendDialog(self)
 
