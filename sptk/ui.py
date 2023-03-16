@@ -10,6 +10,9 @@
 import wx
 import wx.xrc
 
+import gettext
+_ = gettext.gettext
+
 ###########################################################################
 ## Class MainWindow
 ###########################################################################
@@ -28,7 +31,7 @@ class MainWindow ( wx.Frame ):
 
         self.mnu_file.AppendSeparator()
 
-        self.mnu_exit = wx.MenuItem( self.mnu_file, wx.ID_ANY, _(u"Exit")+ u"\t" + u"Alt+X", wx.EmptyString, wx.ITEM_NORMAL )
+        self.mnu_exit = wx.MenuItem( self.mnu_file, wx.ID_EXIT, _(u"Quit"), wx.EmptyString, wx.ITEM_NORMAL )
         self.mnu_file.Append( self.mnu_exit )
 
         self.menubar.Append( self.mnu_file, _(u"File") )
@@ -54,7 +57,7 @@ class MainWindow ( wx.Frame ):
 
         self.toolbar.AddSeparator()
 
-        self.tool_exit = self.toolbar.AddTool( wx.ID_ANY, _(u"Exit"), wx.ArtProvider.GetBitmap( wx.ART_QUIT,  ), wx.NullBitmap, wx.ITEM_NORMAL, wx.EmptyString, wx.EmptyString, None )
+        self.tool_exit = self.toolbar.AddTool( wx.ID_EXIT, wx.EmptyString, wx.ArtProvider.GetBitmap( wx.ART_QUIT,  ), wx.NullBitmap, wx.ITEM_NORMAL, wx.EmptyString, wx.EmptyString, None )
 
         self.toolbar.Realize()
 
@@ -106,7 +109,6 @@ class MainWindow ( wx.Frame ):
         # Connect Events
         self.Bind( wx.EVT_CLOSE, self.on_close )
         self.Bind( wx.EVT_MENU, self.mnu_send_click, id = self.mnu_send.GetId() )
-        self.Bind( wx.EVT_MENU, self.mnu_exit_click, id = self.mnu_exit.GetId() )
         self.Bind( wx.EVT_MENU, self.mnu_ser_port_click, id = self.mnu_ser_port.GetId() )
         self.Bind( wx.EVT_MENU, self.mnu_about_click, id = self.mnu_about.GetId() )
         self.Bind( wx.EVT_TOOL, self.tool_open_port_click, id = self.tool_open_port.GetId() )
@@ -124,9 +126,6 @@ class MainWindow ( wx.Frame ):
         event.Skip()
 
     def mnu_send_click( self, event ):
-        event.Skip()
-
-    def mnu_exit_click( self, event ):
         event.Skip()
 
     def mnu_ser_port_click( self, event ):
@@ -233,10 +232,10 @@ class SerialPortDialog ( wx.Dialog ):
 
         bSizer7 = wx.BoxSizer( wx.HORIZONTAL )
 
-        self.btn_ok = wx.Button( self, wx.ID_ANY, _(u"Ok"), wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.btn_ok = wx.Button( self, wx.ID_OK, _(u"Ok"), wx.DefaultPosition, wx.DefaultSize, 0 )
         bSizer7.Add( self.btn_ok, 0, wx.ALL, 5 )
 
-        self.btn_cancel = wx.Button( self, wx.ID_ANY, _(u"Cancel"), wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.btn_cancel = wx.Button( self, wx.ID_CANCEL, _(u"Cancel"), wx.DefaultPosition, wx.DefaultSize, 0 )
         bSizer7.Add( self.btn_cancel, 0, wx.ALL, 5 )
 
 
@@ -253,7 +252,6 @@ class SerialPortDialog ( wx.Dialog ):
 
         # Connect Events
         self.btn_ok.Bind( wx.EVT_BUTTON, self.btn_ok_click )
-        self.btn_cancel.Bind( wx.EVT_BUTTON, self.btn_cancel_click )
 
     def __del__( self ):
         pass
@@ -261,9 +259,6 @@ class SerialPortDialog ( wx.Dialog ):
 
     # Virtual event handlers, override them in your derived class
     def btn_ok_click( self, event ):
-        event.Skip()
-
-    def btn_cancel_click( self, event ):
         event.Skip()
 
 

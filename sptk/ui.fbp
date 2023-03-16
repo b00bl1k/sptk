@@ -106,14 +106,13 @@
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help"></property>
-                        <property name="id">wxID_ANY</property>
+                        <property name="id">wxID_EXIT</property>
                         <property name="kind">wxITEM_NORMAL</property>
-                        <property name="label">Exit</property>
+                        <property name="label">Quit</property>
                         <property name="name">mnu_exit</property>
                         <property name="permission">none</property>
-                        <property name="shortcut">Alt+X</property>
+                        <property name="shortcut"></property>
                         <property name="unchecked_bitmap"></property>
-                        <event name="OnMenuSelection">mnu_exit_click</event>
                     </object>
                 </object>
                 <object class="wxMenu" expanded="0">
@@ -155,7 +154,7 @@
                     </object>
                 </object>
             </object>
-            <object class="wxToolBar" expanded="0">
+            <object class="wxToolBar" expanded="1">
                 <property name="BottomDockable">1</property>
                 <property name="LeftDockable">1</property>
                 <property name="RightDockable">1</property>
@@ -241,9 +240,9 @@
                 <object class="tool" expanded="0">
                     <property name="bitmap">Load From Art Provider; wxART_QUIT; </property>
                     <property name="context_menu">0</property>
-                    <property name="id">wxID_ANY</property>
+                    <property name="id">wxID_EXIT</property>
                     <property name="kind">wxITEM_NORMAL</property>
-                    <property name="label">Exit</property>
+                    <property name="label"></property>
                     <property name="name">tool_exit</property>
                     <property name="permission">protected</property>
                     <property name="statusbar"></property>
@@ -1530,7 +1529,7 @@
                                         <property name="font"></property>
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
-                                        <property name="id">wxID_ANY</property>
+                                        <property name="id">wxID_OK</property>
                                         <property name="label">Ok</property>
                                         <property name="margins"></property>
                                         <property name="markup">0</property>
@@ -1604,7 +1603,7 @@
                                         <property name="font"></property>
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
-                                        <property name="id">wxID_ANY</property>
+                                        <property name="id">wxID_CANCEL</property>
                                         <property name="label">Cancel</property>
                                         <property name="margins"></property>
                                         <property name="markup">0</property>
@@ -1638,7 +1637,6 @@
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
                                         <property name="window_style"></property>
-                                        <event name="OnButtonClick">btn_cancel_click</event>
                                     </object>
                                 </object>
                             </object>

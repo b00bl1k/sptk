@@ -41,11 +41,11 @@ class SerialPortDialog(ui.SerialPortDialog):
         "8": serial.EIGHTBITS,
     }
     PARITY = {
-        "None": serial.PARITY_NONE,
-        "Event": serial.PARITY_EVEN,
-        "Odd": serial.PARITY_EVEN,
-        "Mark": serial.PARITY_MARK,
-        "Space": serial.PARITY_SPACE,
+        _("None"): serial.PARITY_NONE,
+        _("Event"): serial.PARITY_EVEN,
+        _("Odd"): serial.PARITY_EVEN,
+        _("Mark"): serial.PARITY_MARK,
+        _("Space"): serial.PARITY_SPACE,
     }
     STOPBITS = {
         "1": serial.STOPBITS_ONE,
@@ -53,34 +53,40 @@ class SerialPortDialog(ui.SerialPortDialog):
         "2": serial.STOPBITS_TWO,
     }
 
-    def __init__(self, parent):
+    def __init__(self, parent, conf):
         super().__init__(parent)
-        self.ser = parent.ser
+        self.conf = conf
         self.ports = [port[0] for port in list_ports.comports()]
-        self.list_port.SetItems(self.ports)
-        try:
-            index = self.ports.index(str(self.ser.port))
-            self.list_port.SetSelection(index)
-        except (ValueError, IndexError):
-            pass
 
-        self.list_baud.SetItems(self.BAUDRATES)
-        try:
-            index = self.BAUDRATES.index(str(self.ser.baudrate))
-            self.list_baud.SetSelection(index)
-        except ValueError:
-            pass
+        def _populate_list(lst, choices, value):
+            lst.SetItems(choices)
+            try:
+                lst.SetSelection(choices.index(value))
+            except (ValueError, IndexError):
+                pass
 
-    def btn_cancel_click(self, event):
-        self.Close()
+        def _key_by_value(d, value):
+            for k, v in d.items():
+                if v == value:
+                    return k
+            return ""
+
+        _populate_list(self.list_port, self.ports, conf.serial_port)
+        _populate_list(self.list_baud, self.BAUDRATES, str(conf.serial_baudrate))
+        _populate_list(self.list_data, list(self.DATABITS.keys()),
+                       _key_by_value(self.DATABITS, conf.serial_databits))
+        _populate_list(self.list_stop, list(self.STOPBITS.keys()),
+                       _key_by_value(self.STOPBITS, conf.serial_stopbits))
+        _populate_list(self.list_parity, list(self.PARITY.keys()),
+                       _key_by_value(self.PARITY, conf.serial_parity))
 
     def btn_ok_click(self, event):
-        try:
-            self.ser.port = self.ports[self.list_port.GetSelection()]
-        except IndexError:
-            pass
-        self.ser.baudrate = int(self.BAUDRATES[self.list_baud.GetSelection()])
-        self.Close()
+        self.conf.serial_port = self.list_port.GetStringSelection()
+        self.conf.serial_baudrate = int(self.list_baud.GetStringSelection())
+        self.conf.serial_databits = self.DATABITS[self.list_data.GetStringSelection()]
+        self.conf.serial_parity = self.PARITY[self.list_parity.GetStringSelection()]
+        self.conf.serial_stopbits = self.STOPBITS[self.list_stop.GetStringSelection()]
+        event.Skip()
 
 
 class SendDialog(ui.SendDialog):
@@ -202,7 +208,9 @@ class MainWindow(ui.MainWindow):
         self.statusbar.SetStatusText(self.ser.port, 1)
         port_conf = "{}-{}-{}-{}".format(
             self.ser.baudrate,
-            8, "N", 1,
+            self.ser.bytesize,
+            self.ser.parity,
+            self.ser.stopbits,
         )
         self.statusbar.SetStatusText(port_conf, 2)
 
@@ -225,17 +233,19 @@ class MainWindow(ui.MainWindow):
     def mnu_send_click(self, event):
         self.send_dialog.Show()
 
-    def mnu_exit_click(self, event):
-        self.Close()
-
     def mnu_ser_port_click(self, event):
-        if run := self.ser_worker is not None:
-            self.serial_close()
-        dlg = SerialPortDialog(self)
-        dlg.ShowModal()
-        if run:
-            self.serial_open()
-        self.update_status_bar()
+        dlg = SerialPortDialog(self, self.conf)
+        if dlg.ShowModal() == wx.ID_OK:
+            if run := self.ser_worker is not None:
+                self.serial_close()
+            self.ser.port = self.conf.serial_port
+            self.ser.baudrate = self.conf.serial_baudrate
+            self.ser.bytesize = self.conf.serial_databits
+            self.ser.parity = self.conf.serial_parity
+            self.ser.stopbits = self.conf.serial_stopbits
+            if run:
+                self.serial_open()
+            self.update_status_bar()
 
     def mnu_about_click(self, event):
         wx.MessageBox(f"Serial Port Toolkit v{version.__version__}", _("About"),
@@ -250,7 +260,7 @@ class MainWindow(ui.MainWindow):
     def on_close(self, event):
         self.serial_close()
         self.save_settings()
-        super().on_close(event)
+        event.Skip()
 
     def serial_open(self):
         try:

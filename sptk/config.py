@@ -19,6 +19,9 @@ rx_col2_width=180
 [serial]
 port=
 baudrate=9600
+databits=8
+parity=N
+stopbits=1
 
 [send]
 group0_0=
@@ -147,6 +150,33 @@ class Config:
     @serial_baudrate.setter
     def serial_baudrate(self, value):
         self._config["serial"]["baudrate"] = str(value)
+
+    @property
+    def serial_databits(self):
+        return int(self._config["serial"]["databits"])
+
+    @serial_databits.setter
+    def serial_databits(self, value):
+        self._config["serial"]["databits"] = str(value)
+
+    @property
+    def serial_parity(self):
+        return self._config["serial"]["parity"]
+
+    @serial_parity.setter
+    def serial_parity(self, value):
+        self._config["serial"]["parity"] = value
+
+    @property
+    def serial_stopbits(self):
+        value = self._config["serial"]["stopbits"]
+        if value == "1.5":
+            return float(value)
+        return int(value)
+
+    @serial_stopbits.setter
+    def serial_stopbits(self, value):
+        self._config["serial"]["stopbits"] = str(value)
 
     @property
     def send_group0(self):
