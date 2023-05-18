@@ -1,6 +1,8 @@
 import time
-from serial.threaded import Protocol, ReaderThread
+
+import wx
 from pubsub import pub
+from serial.threaded import Protocol, ReaderThread  # noqa
 
 
 class SerialReceiver(Protocol):
@@ -17,10 +19,10 @@ class SerialReceiver(Protocol):
 
     def connection_lost(self, exc):
         self.transport = None
-        pub.sendMessage("serial.connection_lost")
+        wx.CallAfter(pub.sendMessage, "serial.connection_lost")
 
     def data_received(self, data):
-        pub.sendMessage("serial.receive", data=data)
+        wx.CallAfter(pub.sendMessage, "serial.receive", data=data)
 
 
 class SerialLogView:
@@ -64,11 +66,11 @@ class SerialLog:
     def add_byte(self, b):
         t = time.time()
         is_new_line = (
-            self._is_new_line
-            or not self.lines_count
-            or (self.delim_count and self.line_len >= self.delim_count)
-            or (self.delim_char and self.delim_char == b)
-            or (self.delim_time and t - self.time > self.delim_time)
+                self._is_new_line
+                or not self.lines_count
+                or (self.delim_count and self.line_len >= self.delim_count)
+                or (self.delim_char and self.delim_char == b)
+                or (self.delim_time and t - self.time > self.delim_time)
         )
         self._is_new_line = False
         self.time = t
