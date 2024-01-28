@@ -56,11 +56,11 @@ class Config:
 
     @property
     def main_window_maximized(self):
-        return self._config["ui"][f"main_window_maximized"] == "True"
+        return self._config["ui"]["main_window_maximized"] == "True"
 
     @main_window_maximized.setter
     def main_window_maximized(self, value):
-        self._config["ui"][f"main_window_maximized"] = str(value)
+        self._config["ui"]["main_window_maximized"] = str(value)
 
     @property
     def ui_main_window_x(self):
@@ -193,8 +193,8 @@ class Config:
 
     @property
     def send_is_hex(self):
-        return self._config["send"][f"is_hex"] == "True"
+        return self._config["send"]["is_hex"] == "True"
 
     @send_is_hex.setter
     def send_is_hex(self, value):
-        self._config["send"][f"is_hex"] = str(value)
+        self._config["send"]["is_hex"] = str(value)
